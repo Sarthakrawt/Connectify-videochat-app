@@ -40,7 +40,7 @@ const router = createBrowserRouter(
           element:<OnBoardingPage/>
         },
         {
-          path:"/call",
+          path:"/call/:id",
           element:<CallPage/>
         },
         {

@@ -38,6 +38,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     const initChat = async () => {
+     console.log("this is an authUser",tokenData)
       if (!tokenData?.token || !authUser) return;
 
       try {
