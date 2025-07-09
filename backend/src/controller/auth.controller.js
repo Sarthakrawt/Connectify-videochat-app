@@ -37,7 +37,7 @@ try {
          name: newUser.fullName,
          image: newUser.profilePic || ""
      })
-     console.log("Stream user created for " + newUser.fullName)
+    //  console.log("Stream user created for " + newUser.fullName)
    } catch (error) {
     console.log("Error creating Stream user: ", error)
    }
@@ -68,7 +68,7 @@ async function login(req,res ){
             return res.status(400).json({message: "All fields are requried"})
         }
         const user = await User.findOne({email});
-        console.log(user);
+        // console.log(user);
         if(!user){
            return res.status(401).json({message: "Invalid email or password"})
         }
@@ -132,7 +132,7 @@ try {
          name: updatedUser.fullName,
          image: updatedUser.profilePic || "",
      })
-     console.log(`Stream user updated after onboarding for ${updatedUser.nativeLanguage}`)
+    //  console.log(`Stream user updated after onboarding for ${updatedUser.nativeLanguage}`)
    } catch (error) {
     console.log("Error updating Stream user during onboarding: ", error.message)
    }

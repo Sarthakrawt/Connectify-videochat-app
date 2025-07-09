@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 dotenv.config();
 
 const apiKey = process.env.STREM_API_KEY;
-console.log(apiKey);
+// console.log(apiKey);
 const apiSecret = process.env.STREM_API_SECRET;
 
 if(!apiKey || !apiSecret){

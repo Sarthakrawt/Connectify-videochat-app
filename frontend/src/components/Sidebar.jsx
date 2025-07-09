@@ -1,64 +1,74 @@
 import { Link, useLocation } from "react-router";
 import useAuthUser from "../hooks/useAuthUser";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useThemeStore } from '../store/useThemeStore.js';
+// Reusable link component for clarity and DRYness
+const SidebarLink = ({ to, label }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+  
 
+  return (
+    <Link
+      to={to}
+      className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors 
+        ${isActive
+          ? "bg-blue-600 text-white shadow-sm"
+          : "text-gray-700 hover:bg-gray-100"
+        }`} 
+    >
+      {label}
+    </Link>
+  );
+};
 
 const Sidebar = () => {
   const { authUser } = useAuthUser();
-  const location = useLocation();
-  const currentPath = location.pathname;
+
+const [styl, setStyl] = useState({});
+  const {theme} = useThemeStore();
+
+   useEffect(()=>{
+typeof theme =="string" ? setStyl({
+      backgroundColor: "dark-blue",
+     }) :  setStyl({
+      backgroundColor : `${theme.colors[1]}`,
+      color : `${theme.colors[3]}`,
+      borderColor:`${theme.colors[0]}`
+    })
+  },[theme])
 
   return (
-    <aside className="w-50  shadow-md shadow-gray hidden lg:flex flex-col h-screen sticky top-0">
-      <div className="p-3.5 border-b">
-        <Link to="/" className="flex   items-center gap-2.5">
-          <span className="text-3xl font-bold font-mono bg-clip-text
-          bg-gradient-to-r ">
-           Connectify
+    <aside className="hidden lg:flex flex-col w-60 h-screen sticky top-0 shadow-md bg-blue-950" style={styl}>
+      {/* Logo */}
+      <div className="p-5 border-b">
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="text-3xl font-bold font-mono bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text">
+            Connectify
           </span>
         </Link>
       </div>
 
-      <nav className="flex-col flex gap-10 p-4 space-y-1 justify-center ">
-        <Link
-          to="/"
-          className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
-            currentPath === "/" ? "btn-active" : ""
-          }`}
-        >
-          <span>Home</span>
-        </Link>
-
-        <Link
-          to="/friends"
-          className={`justify-start w-full gap-3 px-3 normal-case ${
-            currentPath === "/friends" ? "btn-active" : ""
-          }`}
-        >
-          <span>Friends</span>
-        </Link>
-
-        <Link
-          to="/notifications"
-          className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case ${
-            currentPath === "/notifications" ? "btn-active" : ""
-          }`}
-        >
-          <span>Notifications</span>
-        </Link>
+      {/* Navigation */}
+      <nav className="flex flex-col gap-4 p-5">
+        <SidebarLink to="/" label="Home" />
+        <SidebarLink to="/friends" label="Friends" />
+        <SidebarLink to="/notifications" label="Notifications" />
       </nav>
 
-      {/* USER PROFILE SECTION */}
-      <div className="p-4 \border-base-300 mt-auto">
+      {/* User info */}
+      <div className="mt-auto p-5 border-t">
         <div className="flex items-center gap-3">
           <div className="avatar">
-            <div className="w-10">
-              <img src={authUser?.profilePic} alt="User Avatar" className="rounded-full" />
+            <div className="w-10 rounded-full">
+              <img src={authUser?.profilePic} alt="User Avatar" />
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex flex-col">
             <p className="font-semibold text-sm">{authUser?.fullName}</p>
-            <p className="text-xs text-success flex items-center gap-1">
-              <span className="size-2 rounded-full bg-green-500 inline-block " />
+            <p className="text-xs text-green-500 flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
               Online
             </p>
           </div>
@@ -67,4 +77,5 @@ const Sidebar = () => {
     </aside>
   );
 };
+
 export default Sidebar;

@@ -1,162 +1,136 @@
-import React, {useState} from 'react'
-import {Link} from "react-router-dom"
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { signup } from '../lib/api.js'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signup } from '../lib/api.js';
 
 function SignUpPage() {
-    const [signupData, setSignupData] = useState({
-        fullName: "",
-        email : "",
-        password: "",
-    })
+  const [signupData, setSignupData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+  });
 
-    const queryClient  = useQueryClient();
-    const {mutate, isPending,error} =  useMutation({
-        mutationFn: signup,
-        onSuccess:()=> queryClient.invalidateQueries({queryKey: ["authUser"]})
-    })
-    
-    const handleSignup = (e)=>{
-        e.preventDefault();
-        mutate(signupData)
-    }
-    
+  const queryClient = useQueryClient();
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: signup,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['authUser'] }),
+  });
 
-    return (
-        <div
-      className="bg-gray-800 text-white h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-      data-theme="forest"
-    >
-      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
-        
-        <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col">
-          
-          <div className="mb-4 flex items-center justify-start gap-2">
-            
-            <span className=" text-blue-500 text-3xl font-bold font-mono bg-clip-text bg-gradient-to-r from-primary to-secondary tracking-wider">
-              Connectify
-            </span>
-          </div>
+  const handleSignup = (e) => {
+    e.preventDefault();
+    mutate(signupData);
+  };
 
-         
+  return (
+    <div className="bg-gradient-to-br from-blue-100 to-blue-300 min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col lg:flex-row w-full max-w-5xl">
+        {/* Form Section */}
+        <div className="w-full lg:w-1/2 p-8 sm:p-10">
+          <h1 className="text-3xl font-bold text-blue-700 mb-2 font-mono">Connectify</h1>
+          <p className="text-sm text-gray-500 mb-6">
+            Join Streamify and start your language learning adventure!
+          </p>
+
           {error && (
-            <div className="mb-4 text-red-500">
-                <span>{error}</span>
+            <div className="bg-red-100 text-red-600 rounded-lg p-3 mb-4">
+              {error.message || 'Signup failed. Please try again.'}
             </div>
           )}
 
-          <div className="w-full">
-            <form  onSubmit={handleSignup}>
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-xl font-semibold">Create an Account</h2>
-                  <p className="text-sm opacity-70">
-                    Join Streamify and start your language learning adventure!
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  {/* FULLNAME */}
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span >Full Name</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="John Doe"
-                       className=" h-10 border rounded-2xl pl-5 w-full mt-2"
-                      value={signupData.fullName}
-                      onChange={(e) => setSignupData({ ...signupData, fullName: e.target.value })}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text">Email</span>
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="john@gmail.com"
-                      className=" h-10 border rounded-2xl pl-5 w-full mt-2"
-                      value={signupData.email}
-                      onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="form-control w-full">
-                    <label className="label">
-                      <span className="label-text">Password</span>
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="********"
-                      className=" h-10 border rounded-2xl pl-5 w-full mt-2"
-                      value={signupData.password}
-                      onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
-                      required
-                    />
-                    <p className="text-xs opacity-70 mt-1">
-                      Password must be at least 6 characters long
-                    </p>
-                  </div>
-
-                  <div className="form-control">
-                    <label className="label cursor-pointer justify-start gap-2">
-                      <input type="checkbox"  required />
-                      <span className="text-xs leading-tight m-1">
-                        I agree to the{" "}
-                        <span className="text-blue-500 hover:underline">terms of service</span> and{" "}
-                        <span className="text-blue-500 hover:underline">privacy policy</span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <button className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 rounded-4xl" type="submit">
-                   {isPending?(
-                    <>
-                    <span className=''>
-                    </span>
-                    Loading...
-                    </>
-                    
-                   ):("Create Account")}
-                </button>
-
-                <div className="text-center mt-4">
-                  <p className="text-sm">
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-blue-500 hover:underline">
-                      Sign in
-                    </Link>
-                  </p>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-       
-        <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center bg-blue-950">
-          <div className="max-w-md p-8">
-           
-            <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="../public/Chatting-rafiki.png" alt="Language connection illustration" className="w-full h-full" />
+          <form onSubmit={handleSignup} className="space-y-6">
+            {/* Full Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Full Name</label>
+              <input
+                type="text"
+                placeholder="John Doe"
+                className="mt-1 w-full px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-600 text-gray-600"
+                value={signupData.fullName}
+                onChange={(e) => setSignupData({ ...signupData, fullName: e.target.value })}
+                required
+              />
             </div>
 
-            <div className="text-center space-y-3 mt-6">
-              <h2 className="text-xl font-semibold">Connect with language partners worldwide</h2>
-              <p className="opacity-70">
-                Practice conversations, make friends, and improve your language skills together
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                placeholder="john@example.com"
+                className="mt-1 w-full px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-600 text-gray-600"
+                value={signupData.email}
+                onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                type="password"
+                placeholder="********"
+                className="mt-1 w-full px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-600 text-gray-600"
+                value={signupData.password}
+                onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Password must be at least 6 characters.
               </p>
             </div>
+
+            {/* Terms Checkbox */}
+            <div className="flex items-start space-x-2 text-sm">
+              <input type="checkbox" required className="mt-1" />
+              <p className='text-black'>
+                I agree to the{' '}
+                <span className="text-blue-600 hover:underline">terms of service</span> and{' '}
+                <span className="text-blue-600 hover:underline">privacy policy</span>
+              </p>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={isPending}
+              className={`w-full py-2 px-4 text-white font-semibold rounded-lg transition ${
+                isPending
+                  ? 'bg-blue-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+            >
+              {isPending ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <p className="text-sm text-center mt-4 text-black">
+            Already have an account?{' '}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </div>
+
+        {/* Right Section (Image + Text) */}
+        <div className="hidden lg:flex w-1/2 bg-blue-950 text-white items-center justify-center p-8">
+          <div className="text-center space-y-6 max-w-md">
+            <img
+              src="/Chatting-rafiki.png"
+              alt="Illustration"
+              className="w-64 h-64 object-contain mx-auto"
+            />
+            <h2 className="text-2xl font-semibold">
+              Connect with language partners worldwide
+            </h2>
+            <p className="text-sm text-blue-200">
+              Practice conversations, make friends, and improve your language skills together.
+            </p>
           </div>
         </div>
       </div>
     </div>
-    )
+  );
 }
 
-export default SignUpPage
+export default SignUpPage;

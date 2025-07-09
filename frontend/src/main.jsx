@@ -44,7 +44,7 @@ const router = createBrowserRouter(
           element:<CallPage/>
         },
         {
-          path:"/chat",
+          path:"/chat/:id",
           element:<ChatPage/>
         } 
       ]

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 
 const LoginPage = () => {
@@ -7,134 +7,105 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
-
-  // This is how we did it at first, without using our custom hook
-  // const queryClient = useQueryClient();
-  // const {
-  //   mutate: loginMutation,
-  //   isPending,
-  //   error,
-  // } = useMutation({
-  //   mutationFn: login,
-  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-  // });
-
-  // This is how we did it using our custom hook - optimized version
   const { isPending, error, loginMutation, isSuccess } = useLogin();
 
-  useEffect(()=>{
-    isSuccess? navigate('/') : "Do not navigate";
-  },[isSuccess,navigate])
+  useEffect(() => {
+    if (isSuccess) navigate("/");
+  }, [isSuccess, navigate]);
+
   const handleLogin = (e) => {
     e.preventDefault();
     loginMutation(loginData);
   };
 
   return (
-    <div
-      className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8"
-    >
-      <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
-        {/* LOGIN FORM SECTION */}
-        <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col gap-5">
-          {/* LOGO */}
-          <div className="mb-4 flex items-center justify-start gap-2">
-           
-            <span className="text-3xl font-bold text-blue-500 font-mono bg-clip-text ">
-             Connectify
-            </span>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center px-4 py-10">
+      <div className="bg-white shadow-2xl rounded-2xl overflow-hidden flex flex-col lg:flex-row w-full max-w-5xl">
+        {/* Left: Form */}
+        <div className="w-full lg:w-1/2 p-8 sm:p-10 space-y-6">
+          {/* Header */}
+          <h1 className="text-3xl font-bold text-blue-700 font-mono">Connectify</h1>
+          <p className="text-sm text-gray-500">
+            Sign in to your account to continue your language journey
+          </p>
 
-          {/* ERROR MESSAGE DISPLAY */}
+          {/* Error */}
           {error && (
-            <div className="mb-4">
-              <span className="text-red-600 font-bold">{error.response.data.message}</span>
+            <div className="bg-red-100 text-red-700 p-3 rounded-md">
+              {error.response?.data?.message || "Login failed. Try again."}
             </div>
           )}
 
-          <div className="w-full">
-            <form onSubmit={handleLogin}>
-              <div className="space-y-4">
-                <div>
-                  <h2 className="text-xl font-semibold">Welcome Back</h2>
-                  <p className="text-sm opacity-70 mt-5">
-                    Sign in to your account to continue your language journey
-                  </p>
-                </div>
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-6">
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border-black placeholder:text-gray-600 text-gray-600" 
+                value={loginData.email}
+                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                required
+              />
+            </div>
 
-                <div className="flex flex-col gap-3">
-                  <div className="w-full space-y-2 mb-4 mt-7">
-                    <label className="label">
-                      <span className="font-bold">Email</span>
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="yo@example.com"
-                      className=" w-full mt-4 border rounded-2xl pl-3 h-10"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                      required
-                    />
-                  </div>
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 border-black placeholder:text-gray-600 text-gray-600"
+                value={loginData.password}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                required
+              />
+            </div>
 
-                  <div className="f w-full space-y-2 mb-15">
-                    <label className="label">
-                      <span className=" font-bold">Password</span>
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      className="w-full mt-4  border rounded-2xl pl-3 h-10"
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                      required
-                    />
-                  </div>
+            {/* Submit */}
+            <button
+              type="submit"
+              className={`w-full py-2 px-4 text-white font-semibold rounded-lg transition ${
+                isPending
+                  ? "bg-blue-300 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+              disabled={isPending}
+            >
+              {isPending ? "Signing in..." : "Sign In"}
+            </button>
+          </form>
 
-                  <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 rounded-4xl" disabled={isPending}>
-                    {isPending ? (
-                      <>
-                        <span></span>
-                        Signing in...
-                      </>
-                    ) : (
-                      "Sign In"
-                    )}
-                  </button>
-
-                  <div className="text-center mt-4">
-                    <p className="text-sm">
-                      Don't have an account?{" "}
-                      <Link to="/signup" className=" text-blue-500 hover:underline">
-                        Create one
-                      </Link>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
+          {/* Sign Up Link */}
+          <p className="text-sm text-center mt-4 text-black">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-blue-600 hover:underline">
+              Create one
+            </Link>
+          </p>
         </div>
 
-        {/* IMAGE SECTION */}
-        <div className="bg-blue-950 hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
-          <div className="max-w-md p-8">
-            {/* Illustration */}
-            <div className="relative aspect-square max-w-sm mx-auto">
-              <img src="../public/Chatting-rafiki.png" alt="Language connection illustration" className="w-full h-full" />
-            </div>
-
-            <div className="text-center space-y-3 mt-6">
-              <h2 className="text-xl font-semibold">Connect with language partners worldwide</h2>
-              <p className="opacity-70">
-                Practice conversations, make friends, and improve your language skills together
-              </p>
-            </div>
+        {/* Right: Illustration */}
+        <div className="hidden lg:flex w-full lg:w-1/2 bg-blue-950 items-center justify-center text-white">
+          <div className="max-w-md p-8 text-center">
+            <img
+              src="/Chatting-rafiki.png"
+              alt="Language connection illustration"
+              className="w-64 h-64 mx-auto object-contain"
+            />
+            <h2 className="text-xl font-semibold mt-6">Connect with language partners worldwide</h2>
+            <p className="text-sm text-blue-200 mt-2">
+              Practice conversations, make friends, and improve your language skills together.
+            </p>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default LoginPage;

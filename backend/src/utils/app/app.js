@@ -1,6 +1,6 @@
 import express from 'express'
 import router from '../../routes/auth.routes.js';
-import userRouter from '../../routes/auth.routes.js';
+import userRouter from '../../routes/user.routes.js';
 import chatRouter from '../../routes/chat.routes.js';
 import cookieParser from "cookie-parser"
 import cors from "cors"

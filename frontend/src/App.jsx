@@ -41,7 +41,7 @@ typeof theme =="string" ? setStyl({
  
    
   return (
-    <div className ="h-screen" style={styl}>
+    <div className ="w-auto h-auto" style={styl}>
       <Outlet />
       <Toaster />
     </div>
