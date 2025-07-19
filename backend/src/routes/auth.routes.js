@@ -17,7 +17,10 @@ router.post("/logout",
 router.post("/onboarding", protectRoute, onboard)
 
 router.get("/me", protectRoute,(req,res)=>{
-    res.status(200).json({success:true, user: req.user});
+   try{
+        res.status(200).json({success:true, user: req.user});
+   }catch(error){
+       console.log("Error at get method", error)}
 } )
 
 
