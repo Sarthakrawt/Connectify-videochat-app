@@ -12,6 +12,10 @@ app.use(cors({
     origin: "https://connectify-videochat-app.vercel.app",
     credentials: true
 }))
+app.options("*", cors({
+  origin: "https://connectify-videochat-app.vercel.app",
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", router);
