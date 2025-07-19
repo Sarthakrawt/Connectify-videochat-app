@@ -2,6 +2,6 @@ import axios from "axios"
 
 
 export const axiosInstance = axios.create({
-    baseURL: "https://render.com/docs/web-services#port-bindingi",
+    baseURL: "https://connectify-videochat-app.onrender.com",
     withCredentials: true,// send cookie
 })
