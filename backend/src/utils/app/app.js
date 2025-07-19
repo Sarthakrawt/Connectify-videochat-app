@@ -9,7 +9,7 @@ import cors from "cors"
 const app = express();
 console.log("cors is working")
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://connectify-videochat-app.vercel.app",
     credentials: true
 }))
 app.use(cookieParser());
