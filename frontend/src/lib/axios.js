@@ -2,6 +2,6 @@ import axios from "axios"
 
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: "https://render.com/docs/web-services#port-bindingi",
     withCredentials: true,// send cookie
 })
